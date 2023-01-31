@@ -11,7 +11,6 @@ import { HttpService } from './services/http.service';
 })
 export class AppComponent {
   public headerTitle = '';
-  public currentRoute: any;
 
   constructor(
     private router: Router,
