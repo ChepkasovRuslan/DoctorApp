@@ -1,0 +1,6 @@
+main {
+  display: flex;
+  padding: 41px 56px 41px 56px;
+  gap: 51px;
+  justify-content: center;
+}

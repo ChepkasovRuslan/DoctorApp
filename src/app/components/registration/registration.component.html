@@ -1,1 +1,24 @@
-<p>registration works!</p>
+<main>
+  <img src="assets/images/building.svg" alt="main image" />
+  <form class="form">
+    <h1 class="form__form-header">Регистрация</h1>
+    <div class="form-block display-direction-column">
+      <label class="form-label" for="login">Логин</label>
+      <input id="login" class="form-input form-items__item" name="login" type="text" placeholder="Логин" />
+      <label class="form-label form-items__item" for="password">Пароль</label>
+      <input id="password" class="form-input form-items__item" name="password" type="text" placeholder="Пароль" />
+      <label class="form-label form-items__item" for="password-repeat">Повторите пароль</label>
+      <input
+        id="password-repeat"
+        class="form-input form-items__item"
+        name="password-repeat"
+        type="text"
+        placeholder="Повторите пароль"
+      />
+      <div class="form-block display-direction-column">
+        <a class="clickable form-btn align-self-end form-input form-items__item">Зарегистрироваться</a>
+        <a class="clickable form-link align-self-end form-items__item">Авторизоваться</a>
+      </div>
+    </div>
+  </form>
+</main>
