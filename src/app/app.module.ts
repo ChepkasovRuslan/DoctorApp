@@ -11,14 +11,16 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { MaterialModule } from './material/material.module';
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
+import { SnackBarService } from './services/snack-bar.service';
 import { TokenStorageService } from './services/token.service';
 
 @NgModule({
   declarations: [AppComponent, RegistrationComponent, LoginComponent, NotFoundComponent],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, BrowserAnimationsModule],
-  providers: [HttpService, AuthService, TokenStorageService],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, BrowserAnimationsModule, MaterialModule],
+  providers: [HttpService, AuthService, TokenStorageService, SnackBarService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
