@@ -36,6 +36,8 @@ export class LoginComponent {
         this.tokenStorageService.saveToken(result.accessToken);
         this.tokenStorageService.saveRefreshToken(result.refreshToken);
         this.tokenStorageService.saveLogin(result.login);
+
+        this.router.navigate(['/records']);
       });
   }
 
