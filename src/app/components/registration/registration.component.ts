@@ -10,7 +10,6 @@ import { TokenStorageService } from '../../services/token.service';
 })
 export class RegistrationComponent {
   constructor(private authService: AuthService, private tokenStorageService: TokenStorageService) {}
-
   public login = '';
   public password = '';
   public repeatPassword = '';

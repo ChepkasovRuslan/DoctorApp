@@ -19,8 +19,13 @@ export class AppComponent {
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        if (event.url === '/registration') {
-          this.headerTitle = 'Зарегистрироваться в системе';
+        switch (event.url) {
+          case '/registration':
+            this.headerTitle = 'Зарегистрироваться в системе';
+            break;
+          case '/login':
+            this.headerTitle = 'Войти в систему';
+            break;
         }
       }
     });
