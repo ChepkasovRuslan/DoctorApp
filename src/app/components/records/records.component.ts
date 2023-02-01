@@ -1,24 +1,18 @@
 import { Component } from '@angular/core';
 
+import { Doctor } from '../../interfaces/doctor.interface';
+import { HttpService } from '../../services/http.service';
+
 @Component({
   selector: 'app-records',
   templateUrl: './records.component.html',
   styleUrls: ['./records.component.css'],
 })
 export class RecordsComponent {
-  public doctors = [
-    {
-      id: '1',
-      fullName: 'name1',
-    },
-    {
-      id: '2',
-      fullName: 'name2',
-    },
-    {
-      id: '3',
-      fullName: 'name3',
-    },
-  ];
-  public selectedDoctor = 'aaa';
+  constructor(private httpService: HttpService) {
+    httpService.getAllDoctors().subscribe((result) => (this.doctors = result));
+  }
+
+  public doctors: Doctor[] = [];
+  public selectedDoctorId = '';
 }

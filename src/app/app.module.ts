@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,6 +17,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { MaterialModule } from './material/material.module';
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
+import { AuthInterceptorService } from './services/interceptors/auth.interceptor.service';
 import { SnackBarService } from './services/snack-bar.service';
 import { TokenStorageService } from './services/token.service';
 
@@ -31,7 +32,17 @@ import { TokenStorageService } from './services/token.service';
     MaterialModule,
     NgSelectModule,
   ],
-  providers: [HttpService, AuthService, TokenStorageService, SnackBarService],
+  providers: [
+    HttpService,
+    AuthService,
+    TokenStorageService,
+    SnackBarService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

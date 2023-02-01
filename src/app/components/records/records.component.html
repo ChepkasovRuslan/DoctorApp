@@ -6,7 +6,7 @@
     </div>
     <div class="options-panel__item align-self-end">
       <label class="form-label">Врач:</label>
-      <select class="form-input select">
+      <select class="form-input select" [(ngModel)]="selectedDoctorId">
         <option [ngValue]="null" disabled>Выберите врача</option>
         <option *ngFor="let doctor of doctors" [ngValue]="doctor.id">{{ doctor.fullName }}</option>
       </select>

@@ -35,12 +35,12 @@ export class LoginComponent {
           return throwError(() => new Error(this.INVALID_LOGIN_OR_PASSWORD));
         })
       )
-      .subscribe((result) => {
+      .subscribe(async (result) => {
         this.tokenStorageService.saveToken(result.accessToken);
         this.tokenStorageService.saveRefreshToken(result.refreshToken);
         this.tokenStorageService.saveLogin(result.login);
 
-        this.router.navigate(['/records']);
+        await this.router.navigate(['/records']);
       });
   }
 
