@@ -5,7 +5,7 @@ import { User } from '../interfaces/user.interface';
 @Injectable()
 export class TokenStorageService {
   private ACCESS_TOKEN_KEY = 'auth-token';
-  private REFRESH_TOKEN_KEY = 'auth-refreshtoken';
+  private REFRESH_TOKEN_KEY = 'auth-refresh-token';
   private USER_KEY = 'auth-user';
 
   public saveToken(token: string): void {
