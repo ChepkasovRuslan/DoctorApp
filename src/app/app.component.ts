@@ -26,6 +26,8 @@ export class AppComponent {
           case '/login':
             this.headerTitle = 'Войти в систему';
             break;
+          default:
+            this.headerTitle = 'Page not found';
         }
       }
     });
