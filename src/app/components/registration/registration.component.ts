@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 import { TokenStorageService } from '../../services/token.service';
@@ -9,7 +10,11 @@ import { TokenStorageService } from '../../services/token.service';
   styleUrls: ['./registration.component.css'],
 })
 export class RegistrationComponent {
-  constructor(private authService: AuthService, private tokenStorageService: TokenStorageService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService
+  ) {}
   public login = '';
   public password = '';
   public repeatPassword = '';
