@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { NgSelectModule } from '@ng-select/ng-select';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -20,7 +22,15 @@ import { TokenStorageService } from './services/token.service';
 
 @NgModule({
   declarations: [AppComponent, RegistrationComponent, LoginComponent, NotFoundComponent, RecordsComponent],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, BrowserAnimationsModule, MaterialModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    NgSelectModule,
+  ],
   providers: [HttpService, AuthService, TokenStorageService, SnackBarService],
   bootstrap: [AppComponent],
 })

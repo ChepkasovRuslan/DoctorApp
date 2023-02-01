@@ -1,1 +1,24 @@
-<p>records works!</p>
+<main>
+  <div class="options-panel">
+    <div class="options-panel__item align-self-end">
+      <label class="form-label">Имя:</label>
+      <input class="form-input" type="text" />
+    </div>
+    <div class="options-panel__item align-self-end">
+      <label class="form-label">Врач:</label>
+      <select class="form-input select">
+        <option [ngValue]="null" disabled>Выберите врача</option>
+        <option *ngFor="let doctor of doctors" [ngValue]="doctor.id">{{ doctor.fullName }}</option>
+      </select>
+    </div>
+    <div class="options-panel__item align-self-end">
+      <label class="form-label">Дата:</label>
+      <input class="form-input" type="date" />
+    </div>
+    <div class="options-panel__item align-self-end">
+      <label class="form-label">Жалобы:</label>
+      <input class="form-input" type="text" />
+    </div>
+    <a class="form-input clickable align-self-end">Добавить</a>
+  </div>
+</main>

@@ -78,5 +78,10 @@ h1 {
   text-decoration: underline;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.select {
+  background-image: url("/assets/images/drop-down.svg");
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: calc(100% - 8px) center;
+  appearance: none;
+}
