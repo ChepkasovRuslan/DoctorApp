@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
+import { TokenStorageService } from './services/token.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent {
   constructor(
     private router: Router,
     private httpService: HttpService,
+    private tokenStorageService: TokenStorageService,
     @Inject(AuthService) private authService: AuthService
   ) {
     this.router.events.subscribe((event) => {
@@ -39,5 +41,10 @@ export class AppComponent {
         }
       }
     });
+  }
+
+  public logOut() {
+    this.tokenStorageService.clearData();
+    this.router.navigate(['/login']);
   }
 }
