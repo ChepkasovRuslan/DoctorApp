@@ -20,6 +20,7 @@ export class RegistrationComponent {
     private snackBarService: SnackBarService,
     private tokenStorageService: TokenStorageService
   ) {}
+
   public login = '';
   public password = '';
   public repeatPassword = '';

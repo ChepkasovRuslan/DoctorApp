@@ -8,9 +8,9 @@ import { Tokens } from '../interfaces/tokens.interface';
 
 @Injectable()
 export class AuthService {
-  private URL = environment.URL;
-
   constructor(private http: HttpClient) {}
+
+  private URL = environment.URL;
 
   public registerUser = (login: string, password: string, confirmedPassword: string): Observable<Tokens> =>
     this.http.post<Tokens>(this.URL + '/auth/registration', {
