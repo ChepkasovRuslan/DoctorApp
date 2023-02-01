@@ -26,6 +26,9 @@ export class AppComponent {
           case '/login':
             this.headerTitle = 'Войти в систему';
             break;
+          case '/records':
+            this.headerTitle = 'Приемы';
+            break;
           default:
             this.headerTitle = 'Page not found';
         }
