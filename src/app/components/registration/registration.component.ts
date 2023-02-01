@@ -1,7 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { catchError, throwError } from 'rxjs';
+
 import { AuthService } from '../../services/auth.service';
+import { SnackBarService } from '../../services/snack-bar.service';
 import { TokenStorageService } from '../../services/token.service';
 
 @Component({
@@ -13,6 +17,7 @@ export class RegistrationComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private snackBarService: SnackBarService,
     private tokenStorageService: TokenStorageService
   ) {}
   public login = '';
@@ -20,9 +25,27 @@ export class RegistrationComponent {
   public repeatPassword = '';
 
   public registerUser() {
-    this.authService.registerUser(this.login, this.password, this.repeatPassword).subscribe((result) => {
-      this.tokenStorageService.saveToken(result.accessToken);
-      this.tokenStorageService.saveRefreshToken(result.refreshToken);
-    });
+    this.authService
+      .registerUser(this.login, this.password, this.repeatPassword)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.snackBarService.showErrorSnack(errorResponse.error.errors.map((e: { msg: string }) => e.msg).join('. '));
+          this.clearFields();
+
+          return throwError(() => new Error(errorResponse.status.toString()));
+        })
+      )
+      .subscribe(async (result) => {
+        this.tokenStorageService.saveToken(result.accessToken);
+        this.tokenStorageService.saveRefreshToken(result.refreshToken);
+
+        await this.router.navigate(['/login']);
+      });
+  }
+
+  private clearFields() {
+    this.login = '';
+    this.password = '';
+    this.repeatPassword = '';
   }
 }

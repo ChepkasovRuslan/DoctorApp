@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from '../../services/snack-bar.service';
@@ -19,6 +19,8 @@ export class LoginComponent {
     private tokenStorageService: TokenStorageService
   ) {}
 
+  private INVALID_LOGIN_OR_PASSWORD = 'Invalid login or password';
+
   public login = '';
   public password = '';
 
@@ -27,9 +29,10 @@ export class LoginComponent {
       .loginUser(this.login, this.password)
       .pipe(
         catchError(() => {
-          this.snackBarService.showErrorSnack('Неправильный логин или пароль');
+          this.snackBarService.showErrorSnack(this.INVALID_LOGIN_OR_PASSWORD);
           this.clearFields();
-          return of({ accessToken: '', refreshToken: '', login: '' });
+
+          return throwError(() => new Error(this.INVALID_LOGIN_OR_PASSWORD));
         })
       )
       .subscribe((result) => {
