@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 
-import { User } from '../interfaces/user.interface';
-
 @Injectable()
 export class TokenStorageService {
   private ACCESS_TOKEN_KEY = 'auth-token';
   private REFRESH_TOKEN_KEY = 'auth-refresh-token';
-  private USER_KEY = 'auth-user';
+  private LOGIN_KEY = 'auth-login';
 
   public saveToken(token: string): void {
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);
     localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
 
-    const user = this.getUser();
-    if (user && user.id) {
-      this.saveUser(user);
+    const login = this.getLogin();
+    if (login) {
+      this.saveLogin(login);
     }
   }
 
@@ -27,17 +25,10 @@ export class TokenStorageService {
 
   public getRefreshToken = (): string | null => window.localStorage.getItem(this.REFRESH_TOKEN_KEY);
 
-  public saveUser(user: User): void {
-    localStorage.removeItem(this.USER_KEY);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+  public saveLogin(login: string): void {
+    localStorage.removeItem(this.LOGIN_KEY);
+    localStorage.setItem(this.LOGIN_KEY, login);
   }
 
-  public getUser(): User | null {
-    const user = localStorage.getItem(this.USER_KEY);
-    if (user) {
-      return JSON.parse(user);
-    }
-
-    return null;
-  }
+  public getLogin = (): string | null => localStorage.getItem(this.LOGIN_KEY);
 }

@@ -1,7 +1,7 @@
 <main>
   <img src="assets/images/building.svg" alt="main image" />
   <form class="form">
-    <h1 class="form__form-header">Регистрация</h1>
+    <h1 class="form__form-header">Войти в систему</h1>
     <div class="form-block display-direction-column">
       <label class="form-label" for="login">Логин</label>
       <input
@@ -21,20 +21,14 @@
         placeholder="Пароль"
         [(ngModel)]="password"
       />
-      <label class="form-label form-items__item" for="password-repeat">Повторите пароль</label>
-      <input
-        id="password-repeat"
-        class="form-input form-items__item"
-        name="password-repeat"
-        type="text"
-        placeholder="Повторите пароль"
-        [(ngModel)]="repeatPassword"
-      />
       <div class="form-block display-direction-column">
-        <a class="clickable form-btn align-self-end form-input form-items__item" (click)="registerUser()"
-          >Зарегистрироваться</a
+        <a
+          id="login-btn-width"
+          class="clickable text-align-center form-btn align-self-end form-input form-items__item"
+          (click)="loginUser()"
+          >Войти</a
         >
-        <a class="clickable form-link align-self-end form-items__item" href="/login">Авторизоваться</a>
+        <a class="clickable align-self-end form-link form-items__item" href="/registration">Зарегистрироваться</a>
       </div>
     </div>
   </form>
