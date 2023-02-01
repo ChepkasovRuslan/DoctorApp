@@ -11,6 +11,7 @@ import { HttpService } from './services/http.service';
 })
 export class AppComponent {
   public headerTitle = '';
+  public isExitVisible = false;
 
   constructor(
     private router: Router,
@@ -22,15 +23,19 @@ export class AppComponent {
         switch (event.url) {
           case '/registration':
             this.headerTitle = 'Зарегистрироваться в системе';
+            this.isExitVisible = false;
             break;
           case '/login':
             this.headerTitle = 'Войти в систему';
+            this.isExitVisible = false;
             break;
           case '/records':
             this.headerTitle = 'Приемы';
+            this.isExitVisible = true;
             break;
           default:
             this.headerTitle = 'Page not found';
+            this.isExitVisible = false;
         }
       }
     });
