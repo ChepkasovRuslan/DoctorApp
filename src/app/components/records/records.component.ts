@@ -38,14 +38,6 @@ export class RecordsComponent {
   };
   public records: MatTableDataSource<Record> = new MatTableDataSource<Record>();
 
-  public deleteRecord(record: Record) {
-    // TODO: delete
-  }
-
-  public editRecord(record: Record) {
-    // TODO: record
-  }
-
   public nextPage() {
     if (this.currentPage < Math.ceil(this.totalCountOfElements / this.PAGE_SIZE)) this.currentPage++;
     this.getRecords();
@@ -91,9 +83,9 @@ export class RecordsComponent {
         this.totalCountOfElements = result.totalCountOfElements;
 
         let records = this.paginatedRecords.content;
-        for (let record of records) {
-          record.receptionDate = new Date(record.receptionDate).toLocaleDateString();
-        }
+        // for (let record of records) {
+        //   record.receptionDate = new Date(record.receptionDate).toLocaleDateString();
+        // }
 
         this.records = new MatTableDataSource<Record>(records);
       });

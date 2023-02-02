@@ -38,7 +38,9 @@
 
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef>Дата</th>
-        <td class="inline-border" mat-cell *matCellDef="let record">{{ record.receptionDate }}</td>
+        <td class="inline-border" mat-cell *matCellDef="let record">
+          {{ record.receptionDate | date : 'shortDate' }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="complaints">
@@ -50,20 +52,8 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td class="inline-border" mat-cell *matCellDef="let record">
           <div class="icons-container">
-            <mat-icon
-              class="clickable"
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="delete"
-              (click)="deleteRecord(record)"
-            ></mat-icon>
-            <mat-icon
-              class="clickable"
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="edit"
-              (click)="editRecord(record)"
-            ></mat-icon>
+            <mat-icon class="clickable" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+            <mat-icon class="clickable" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
           </div>
         </td>
       </ng-container>
