@@ -9,6 +9,7 @@ export class SnackBarService {
   public readonly UNAUTHORIZED = 'Unauthorized';
   public readonly RECORD_ADDED = 'Record added';
   public readonly RECORD_DELETED = 'Record deleted';
+  public readonly RECORD_EDITED = 'Record edited';
 
   constructor(private snackBar: MatSnackBar) {}
 

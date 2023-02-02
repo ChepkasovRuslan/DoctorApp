@@ -11,6 +11,7 @@ import { Record } from '../../interfaces/record.iterface';
 import { HttpService } from '../../services/http.service';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 
 @Component({
   selector: 'app-records',
@@ -127,27 +128,6 @@ export class RecordsComponent {
       });
   }
 
-  public deleteRecord(recordId: string) {
-    this.httpService
-      .deleteRecord(recordId)
-      .pipe(
-        catchError((errorResponse: HttpErrorResponse) => {
-          if (errorResponse.status !== 401) {
-            if (errorResponse.status === 0) {
-              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
-              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
-            }
-          }
-          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
-          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
-        })
-      )
-      .subscribe(() => {
-        this.getRecords();
-        this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
-      });
-  }
-
   public showDeleteDialog(recordId: string) {
     this.deleteDialog
       .open(DeleteDialogComponent, {
@@ -157,7 +137,26 @@ export class RecordsComponent {
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result) this.getRecords();
+        if (result) {
+          this.getRecords();
+          this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
+        }
+      });
+  }
+
+  public showEditDialog(recordId: string) {
+    this.deleteDialog
+      .open(EditDialogComponent, {
+        width: '642px',
+        height: '250px',
+        data: recordId,
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getRecords();
+          this.snackBarService.showSnack(this.snackBarService.RECORD_EDITED);
+        }
       });
   }
 

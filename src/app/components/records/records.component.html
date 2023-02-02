@@ -59,7 +59,13 @@
               fontIcon="delete"
               (click)="showDeleteDialog(record.id)"
             ></mat-icon>
-            <mat-icon class="clickable" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+            <mat-icon
+              class="clickable"
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="edit"
+              (click)="showEditDialog(record.id)"
+            ></mat-icon>
           </div>
         </td>
       </ng-container>
