@@ -121,6 +121,27 @@ export class RecordsComponent {
       });
   }
 
+  public deleteRecord(recordId: string) {
+    this.httpService
+      .deleteRecord(recordId)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          if (errorResponse.status !== 401) {
+            if (errorResponse.status === 0) {
+              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+            }
+          }
+          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
+          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
+        })
+      )
+      .subscribe(() => {
+        this.getRecords();
+        this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
+      });
+  }
+
   public nextPage() {
     if (this.currentPage < Math.ceil(this.totalCountOfElements / this.PAGE_SIZE)) this.currentPage++;
     this.getRecords();

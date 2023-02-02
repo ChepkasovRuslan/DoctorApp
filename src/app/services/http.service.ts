@@ -13,10 +13,13 @@ export class HttpService {
 
   constructor(private http: HttpClient) {}
 
-  public getAllDoctors = (): Observable<Doctor[]> => this.http.get<Doctor[]>(this.URL + '/doctors');
+  public getAllDoctors = (): Observable<Doctor[]> => this.http.get<Doctor[]>(`${this.URL}/doctors`);
 
   public getAllRecords = (pageSize: number, page: number, sort = ''): Observable<PaginatedRecords> =>
-    this.http.get<PaginatedRecords>(this.URL + `/records?pageSize=${pageSize}&page=${page}&sort=${sort}`);
+    this.http.get<PaginatedRecords>(`${this.URL}/records?pageSize=${pageSize}&page=${page}&sort=${sort}`);
 
-  public createNewRecord = (record: Record): Observable<Record> => this.http.post<Record>(this.URL + '/record', record);
+  public createNewRecord = (record: Record): Observable<Record> => this.http.post<Record>(`${this.URL}/record`, record);
+
+  public deleteRecord = (recordId: string): Observable<Record> =>
+    this.http.delete<Record>(`${this.URL}/record/${recordId}`);
 }

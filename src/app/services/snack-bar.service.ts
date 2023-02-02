@@ -8,6 +8,7 @@ export class SnackBarService {
   public readonly INVALID_DATA = 'Invalid input data';
   public readonly UNAUTHORIZED = 'Unauthorized';
   public readonly RECORD_ADDED = 'Record added';
+  public readonly RECORD_DELETED = 'Record deleted';
 
   constructor(private snackBar: MatSnackBar) {}
 
