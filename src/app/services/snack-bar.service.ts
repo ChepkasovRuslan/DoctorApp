@@ -5,11 +5,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SnackBarService {
   public readonly INVALID_LOGIN_OR_PASSWORD = 'Invalid login or password';
   public readonly NO_CONNECTION = 'No connection with server';
+  public readonly INVALID_DATA = 'Invalid input data';
+  public readonly UNAUTHORIZED = 'Unauthorized';
+  public readonly RECORD_ADDED = 'Record added';
 
   constructor(private snackBar: MatSnackBar) {}
 
-  public showErrorSnack(err: string) {
-    this.snackBar.open(err, 'close', {
+  public showSnack(message: string) {
+    this.snackBar.open(message, 'close', {
       duration: 4000,
     });
   }

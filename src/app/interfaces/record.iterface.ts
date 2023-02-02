@@ -1,9 +1,9 @@
 import { Doctor } from './doctor.interface';
 
 export interface Record {
-  id: string;
+  id?: string;
   patientFullName: string;
-  doctor: Doctor;
+  doctor: Doctor | string;
   receptionDate: string;
   complaints: string;
 }

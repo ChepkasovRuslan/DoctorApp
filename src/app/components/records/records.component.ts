@@ -26,7 +26,13 @@ export class RecordsComponent {
   public totalCountOfElements = 1;
 
   public doctors: Doctor[] = [];
-  public selectedDoctorId = '';
+
+  public newRecord: Record = {
+    patientFullName: '',
+    doctor: '',
+    receptionDate: new Date().toString(),
+    complaints: '',
+  };
 
   public readonly displayedColumns: string[] = ['patient', 'doctor', 'date', 'complaints', 'change'];
   public paginatedRecords: PaginatedRecords = {
@@ -38,30 +44,23 @@ export class RecordsComponent {
   };
   public records: MatTableDataSource<Record> = new MatTableDataSource<Record>();
 
-  public nextPage() {
-    if (this.currentPage < Math.ceil(this.totalCountOfElements / this.PAGE_SIZE)) this.currentPage++;
-    this.getRecords();
-  }
-
-  public previousPage() {
-    if (this.currentPage > 1) this.currentPage--;
-    this.getRecords();
-  }
-
   private getDoctors() {
     this.httpService
       .getAllDoctors()
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           if (errorResponse.status === 0) {
-            this.snackBarService.showErrorSnack(this.snackBarService.NO_CONNECTION);
+            this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
             return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
           }
 
           return throwError(() => new Error());
         })
       )
-      .subscribe((result) => (this.doctors = result));
+      .subscribe((result) => {
+        this.doctors = result;
+        this.newRecord.doctor = result[0].id;
+      });
   }
 
   private getRecords() {
@@ -69,12 +68,16 @@ export class RecordsComponent {
       .getAllRecords(this.PAGE_SIZE, this.currentPage)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          if (errorResponse.status === 0) {
-            this.snackBarService.showErrorSnack(this.snackBarService.NO_CONNECTION);
-            return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
-          }
+          if (errorResponse.status !== 401) {
+            if (errorResponse.status === 0) {
+              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+            }
 
-          return throwError(() => new Error());
+            return throwError(() => new Error());
+          }
+          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
+          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
         })
       )
       .subscribe((result) => {
@@ -83,11 +86,48 @@ export class RecordsComponent {
         this.totalCountOfElements = result.totalCountOfElements;
 
         let records = this.paginatedRecords.content;
-        // for (let record of records) {
-        //   record.receptionDate = new Date(record.receptionDate).toLocaleDateString();
-        // }
 
         this.records = new MatTableDataSource<Record>(records);
       });
+  }
+
+  private clearFields() {
+    this.newRecord.patientFullName = '';
+    this.newRecord.complaints = '';
+  }
+
+  public addRecord() {
+    this.httpService
+      .createNewRecord(this.newRecord)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          if (errorResponse.status !== 401) {
+            if (errorResponse.status === 0) {
+              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+            }
+
+            this.snackBarService.showSnack(this.snackBarService.INVALID_DATA);
+            return throwError(() => new Error(this.snackBarService.INVALID_DATA));
+          }
+          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
+          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
+        })
+      )
+      .subscribe(() => {
+        this.getRecords();
+        this.clearFields();
+        this.snackBarService.showSnack(this.snackBarService.RECORD_ADDED);
+      });
+  }
+
+  public nextPage() {
+    if (this.currentPage < Math.ceil(this.totalCountOfElements / this.PAGE_SIZE)) this.currentPage++;
+    this.getRecords();
+  }
+
+  public previousPage() {
+    if (this.currentPage > 1) this.currentPage--;
+    this.getRecords();
   }
 }

@@ -31,11 +31,11 @@ export class LoginComponent {
           this.clearFields();
 
           if (errorResponse.status === 0) {
-            this.snackBarService.showErrorSnack(this.snackBarService.NO_CONNECTION);
+            this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
             return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
           }
 
-          this.snackBarService.showErrorSnack(this.snackBarService.INVALID_LOGIN_OR_PASSWORD);
+          this.snackBarService.showSnack(this.snackBarService.INVALID_LOGIN_OR_PASSWORD);
           return throwError(() => new Error(this.snackBarService.INVALID_LOGIN_OR_PASSWORD));
         })
       )
