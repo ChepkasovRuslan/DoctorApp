@@ -71,5 +71,11 @@
       <tr class="gray-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+
+    <div class="table-pages">
+      <mat-icon class="clickable" (click)="previousPage()">keyboard_arrow_left</mat-icon>
+      <p>{{ currentPage }} из {{ totalCountOfElements / PAGE_SIZE | ceil }}</p>
+      <mat-icon class="clickable" (click)="nextPage()">keyboard_arrow_right</mat-icon>
+    </div>
   </div>
 </main>

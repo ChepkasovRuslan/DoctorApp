@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
+import { NgCeilPipeModule } from 'angular-pipes';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -31,6 +33,7 @@ import { TokenStorageService } from './services/token.service';
     BrowserAnimationsModule,
     MaterialModule,
     NgSelectModule,
+    NgCeilPipeModule,
   ],
   providers: [
     HttpService,

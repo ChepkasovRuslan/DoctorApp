@@ -14,5 +14,6 @@ export class HttpService {
 
   public getAllDoctors = (): Observable<Doctor[]> => this.http.get<Doctor[]>(this.URL + '/doctors');
 
-  public getAllRecords = (): Observable<PaginatedRecords> => this.http.get<PaginatedRecords>(this.URL + '/records');
+  public getAllRecords = (pageSize: number, page: number, sort = ''): Observable<PaginatedRecords> =>
+    this.http.get<PaginatedRecords>(this.URL + `/records?pageSize=${pageSize}&page=${page}&sort=${sort}`);
 }
