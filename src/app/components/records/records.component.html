@@ -21,4 +21,55 @@
     </div>
     <a class="form-input clickable align-self-end">Добавить</a>
   </div>
+
+  <div class="table">
+    <table mat-table [dataSource]="records">
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef>Имя</th>
+        <td class="inline-border" mat-cell *matCellDef="let record">{{ record.patientFullName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="doctor">
+        <th mat-header-cell *matHeaderCellDef>Врач</th>
+        <td class="inline-border" mat-cell *matCellDef="let record">
+          {{ record.doctor.fullName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Дата</th>
+        <td class="inline-border" mat-cell *matCellDef="let record">{{ record.receptionDate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="complaints">
+        <th mat-header-cell *matHeaderCellDef>Жалобы</th>
+        <td class="inline-border" mat-cell *matCellDef="let record">{{ record.complaints }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="change">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="inline-border" mat-cell *matCellDef="let record">
+          <div class="icons-container">
+            <mat-icon
+              class="clickable"
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="delete"
+              (click)="deleteRecord(record)"
+            ></mat-icon>
+            <mat-icon
+              class="clickable"
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="edit"
+              (click)="editRecord(record)"
+            ></mat-icon>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr class="gray-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
 </main>

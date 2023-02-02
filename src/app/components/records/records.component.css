@@ -17,3 +17,28 @@ main {
   gap: 8px;
   width: 188px;
 }
+
+.icons-container {
+  display: flex;
+  gap: 20px;
+}
+
+.gray-header {
+  background: #C4C4C4;
+}
+
+.table {
+  padding: 15px 44px 15px 44px;
+}
+
+.inline-border {
+  border-inline: 1px solid #000000;
+}
+
+.top-border {
+  border-top: 1px solid #000000;
+}
+
+.bottom-border {
+  border-bottom: 1px solid #000000;
+}
