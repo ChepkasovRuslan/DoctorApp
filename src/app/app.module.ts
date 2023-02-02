@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
+import { EditDialogComponent } from './components/edit-dialog/edit-dialog.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RecordsComponent } from './components/records/records.component';
@@ -32,6 +33,7 @@ import { TokenStorageService } from './services/token.service';
     NotFoundComponent,
     RecordsComponent,
     DeleteDialogComponent,
+    EditDialogComponent,
   ],
   imports: [
     BrowserModule,
