@@ -12,6 +12,7 @@ import { NgCeilPipeModule } from 'angular-pipes';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RecordsComponent } from './components/records/records.component';
@@ -24,7 +25,14 @@ import { SnackBarService } from './services/snack-bar.service';
 import { TokenStorageService } from './services/token.service';
 
 @NgModule({
-  declarations: [AppComponent, RegistrationComponent, LoginComponent, NotFoundComponent, RecordsComponent],
+  declarations: [
+    AppComponent,
+    RegistrationComponent,
+    LoginComponent,
+    NotFoundComponent,
+    RecordsComponent,
+    DeleteDialogComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

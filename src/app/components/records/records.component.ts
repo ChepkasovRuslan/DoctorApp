@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { catchError, throwError } from 'rxjs';
@@ -9,6 +10,7 @@ import { PaginatedRecords } from '../../interfaces/paginated-records.interface';
 import { Record } from '../../interfaces/record.iterface';
 import { HttpService } from '../../services/http.service';
 import { SnackBarService } from '../../services/snack-bar.service';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-records',
@@ -16,7 +18,11 @@ import { SnackBarService } from '../../services/snack-bar.service';
   styleUrls: ['./records.component.css'],
 })
 export class RecordsComponent {
-  constructor(private httpService: HttpService, private snackBarService: SnackBarService) {
+  constructor(
+    private httpService: HttpService,
+    private snackBarService: SnackBarService,
+    private deleteDialog: MatDialog
+  ) {
     this.getDoctors();
     this.getRecords();
   }
@@ -139,6 +145,19 @@ export class RecordsComponent {
       .subscribe(() => {
         this.getRecords();
         this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
+      });
+  }
+
+  public showDeleteDialog(recordId: string) {
+    this.deleteDialog
+      .open(DeleteDialogComponent, {
+        width: '642px',
+        height: '250px',
+        data: recordId,
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) this.getRecords();
       });
   }
 
