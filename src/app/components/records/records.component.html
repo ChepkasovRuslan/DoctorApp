@@ -52,7 +52,13 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td class="inline-border" mat-cell *matCellDef="let record">
           <div class="icons-container">
-            <mat-icon class="clickable" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+            <mat-icon
+              class="clickable"
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="delete"
+              (click)="deleteRecord(record.id)"
+            ></mat-icon>
             <mat-icon class="clickable" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
           </div>
         </td>
