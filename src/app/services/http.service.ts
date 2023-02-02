@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { Doctor } from '../interfaces/doctor.interface';
 import { PaginatedRecords } from '../interfaces/paginated-records.interface';
+import { Record } from '../interfaces/record.iterface';
 
 @Injectable()
 export class HttpService {
@@ -16,4 +17,6 @@ export class HttpService {
 
   public getAllRecords = (pageSize: number, page: number, sort = ''): Observable<PaginatedRecords> =>
     this.http.get<PaginatedRecords>(this.URL + `/records?pageSize=${pageSize}&page=${page}&sort=${sort}`);
+
+  public createNewRecord = (record: Record): Observable<Record> => this.http.post<Record>(this.URL + '/record', record);
 }

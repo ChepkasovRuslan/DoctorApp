@@ -33,7 +33,7 @@ export class RegistrationComponent {
           this.clearFields();
 
           if (errorResponse.status === 0) {
-            this.snackBarService.showErrorSnack(this.snackBarService.NO_CONNECTION);
+            this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
             return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
           }
 
