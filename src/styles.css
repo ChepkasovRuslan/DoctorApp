@@ -14,6 +14,10 @@ h1 {
   font-weight: 300;
 }
 
+textarea {
+  resize: none;
+}
+
 .align-self-center {
   align-self: center;
 }
@@ -105,6 +109,9 @@ h1 {
 }
 
 .dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   padding: 40px 45px 40px 45px;
 }
 
@@ -113,4 +120,12 @@ h1 {
   gap: 12px;
   padding: 20px;
   box-shadow: 4px 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.fill-available {
+  width: -webkit-fill-available;
+}
+
+.large-input {
+  height: 100px;
 }
