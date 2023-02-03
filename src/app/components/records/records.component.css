@@ -58,3 +58,15 @@ main {
 .sort-select-width {
   width: 200px;
 }
+
+.filter-container {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  margin: 28px 0 28px 0;
+}
+
+.filter-container__item {
+  display: flex;
+  gap: 8px;
+}

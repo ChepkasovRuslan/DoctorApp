@@ -73,6 +73,10 @@ export class RecordsComponent {
   public selectedSortDirection = '';
   public sortDirectionVisibility = false;
 
+  public filtrationVisibility = false;
+  public filtrationFromDate = '';
+  public filtrationToDate = '';
+
   public paginatedRecords: PaginatedRecords = {
     content: [],
     page: '',
@@ -252,6 +256,15 @@ export class RecordsComponent {
     this.selectedSortOption = '';
     this.sortDirectionVisibility = false;
     this.selectedSortDirection = '';
+  }
+
+  public changeFiltrationVisibility() {
+    this.filtrationVisibility = !this.filtrationVisibility;
+
+    if (!this.filtrationVisibility) {
+      this.filtrationFromDate = '';
+      this.filtrationToDate = '';
+    }
   }
 
   public showEditDialog(recordId: string) {
