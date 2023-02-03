@@ -44,6 +44,44 @@
       </select>
     </div>
 
+    <div class="filter-container">
+      <div class="filter-container__item" *ngIf="!filtrationVisibility">
+        <p class="align-self-center">Добавить фильтр по дате:</p>
+        <img class="clickable" src="assets/images/add_filter.svg" alt="filter" (click)="changeFiltrationVisibility()" />
+      </div>
+
+      <div class="filter-container__item" *ngIf="filtrationVisibility">
+        <p class="align-self-center">C:</p>
+        <input
+          class="form-input"
+          type="date"
+          [ngModel]="filtrationFromDate"
+          (ngModelChange)="filtrationFromDate = $event"
+        />
+      </div>
+
+      <div class="filter-container__item" *ngIf="filtrationVisibility">
+        <p class="align-self-center">По:</p>
+        <input
+          class="form-input"
+          type="date"
+          [ngModel]="filtrationToDate"
+          (ngModelChange)="filtrationToDate = $event"
+        />
+      </div>
+
+      <button class="form-input clickable" *ngIf="filtrationVisibility" (click)="filterRecords()">Фильтровать</button>
+
+      <mat-icon
+        class="clickable align-self-center"
+        aria-hidden="false"
+        aria-label="Example home icon"
+        fontIcon="delete"
+        (click)="changeFiltrationVisibility()"
+        *ngIf="filtrationVisibility"
+      ></mat-icon>
+    </div>
+
     <table mat-table [dataSource]="records">
       <ng-container matColumnDef="patient">
         <th mat-header-cell *matHeaderCellDef>Имя</th>
