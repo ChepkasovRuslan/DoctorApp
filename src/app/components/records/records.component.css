@@ -47,3 +47,14 @@ main {
   margin-top: 10px;
   display: flex;
 }
+
+.sort-container {
+  display: flex;
+  gap: 18px;
+  margin: 20px 0 20px 0;
+  justify-content: end;
+}
+
+.sort-select-width {
+  width: 200px;
+}
