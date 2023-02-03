@@ -13,7 +13,12 @@
     </div>
     <div class="options-panel__item align-self-end">
       <label class="form-label">Дата:</label>
-      <input class="form-input" type="date" [ngModel]="newRecord.receptionDate | date : 'yyyy-MM-dd'" />
+      <input
+        class="form-input"
+        type="date"
+        [ngModel]="newRecord.receptionDate | date : 'yyyy-MM-dd'"
+        (ngModelChange)="newRecord.receptionDate = $event"
+      />
     </div>
     <div class="options-panel__item align-self-end">
       <label class="form-label">Жалобы:</label>
