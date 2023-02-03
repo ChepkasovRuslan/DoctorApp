@@ -11,6 +11,7 @@ import { Record } from '../../interfaces/record.iterface';
 import { HttpService } from '../../services/http.service';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 
 @Component({
   selector: 'app-records',
@@ -18,11 +19,7 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
   styleUrls: ['./records.component.css'],
 })
 export class RecordsComponent {
-  constructor(
-    private httpService: HttpService,
-    private snackBarService: SnackBarService,
-    private deleteDialog: MatDialog
-  ) {
+  constructor(private httpService: HttpService, private snackBarService: SnackBarService, private dialog: MatDialog) {
     this.getDoctors();
     this.getRecords();
   }
@@ -91,9 +88,49 @@ export class RecordsComponent {
 
         this.totalCountOfElements = result.totalCountOfElements;
 
-        let records = this.paginatedRecords.content;
+        this.records = new MatTableDataSource<Record>(this.paginatedRecords.content);
+      });
+  }
 
-        this.records = new MatTableDataSource<Record>(records);
+  private getEditRecord(recordId: string) {
+    this.httpService
+      .getRecord(recordId)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          if (errorResponse.status !== 401) {
+            if (errorResponse.status === 404) {
+              this.snackBarService.showSnack(this.snackBarService.RECORD_NOT_FOUND);
+              return throwError(() => new Error(this.snackBarService.RECORD_NOT_FOUND));
+            } else if (errorResponse.status === 0) {
+              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+            }
+
+            return throwError(() => new Error());
+          }
+          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
+          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
+        })
+      )
+      .subscribe((result) => {
+        this.dialog
+          .open(EditDialogComponent, {
+            width: '642px',
+            height: '615px',
+
+            data: {
+              record: result,
+              doctors: this.doctors,
+            },
+          })
+          .afterClosed()
+          // eslint-disable-next-line rxjs/no-nested-subscribe
+          .subscribe((result) => {
+            if (result) {
+              this.getRecords();
+              this.snackBarService.showSnack(this.snackBarService.RECORD_EDITED);
+            }
+          });
       });
   }
 
@@ -127,29 +164,8 @@ export class RecordsComponent {
       });
   }
 
-  public deleteRecord(recordId: string) {
-    this.httpService
-      .deleteRecord(recordId)
-      .pipe(
-        catchError((errorResponse: HttpErrorResponse) => {
-          if (errorResponse.status !== 401) {
-            if (errorResponse.status === 0) {
-              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
-              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
-            }
-          }
-          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
-          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
-        })
-      )
-      .subscribe(() => {
-        this.getRecords();
-        this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
-      });
-  }
-
   public showDeleteDialog(recordId: string) {
-    this.deleteDialog
+    this.dialog
       .open(DeleteDialogComponent, {
         width: '642px',
         height: '250px',
@@ -157,8 +173,15 @@ export class RecordsComponent {
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result) this.getRecords();
+        if (result) {
+          this.getRecords();
+          this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
+        }
       });
+  }
+
+  public showEditDialog(recordId: string) {
+    this.getEditRecord(recordId);
   }
 
   public nextPage() {

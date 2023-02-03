@@ -7,7 +7,6 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 @Component({
   selector: 'app-delete-dialog',
   templateUrl: './delete-dialog.component.html',
-  styleUrls: ['./delete-dialog.component.css'],
 })
 export class DeleteDialogComponent {
   constructor(
