@@ -37,7 +37,12 @@ export class RecordsComponent {
     complaints: '',
   };
 
-  public readonly displayedColumns: string[] = ['patient', 'doctor', 'date', 'complaints', 'change'];
+  public readonly displayedColumns = ['patient', 'doctor', 'date', 'complaints', 'change'];
+  public readonly sortOptions = ['Имя', 'Врач', 'Дата'];
+  public selectedSortOption = '';
+  public readonly directions = ['По возрастанию', 'По убыванию'];
+  public selectedDirection = '';
+
   public paginatedRecords: PaginatedRecords = {
     content: [],
     page: '',

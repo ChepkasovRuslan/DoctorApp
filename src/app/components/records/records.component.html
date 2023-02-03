@@ -28,6 +28,17 @@
   </div>
 
   <div class="table">
+    <div class="sort-container">
+      <p class="align-self-center">Сортировать по:</p>
+      <select class="form-input select sort-select-width" [(ngModel)]="selectedSortOption">
+        <option *ngFor="let sortOption of sortOptions" [ngValue]="selectedSortOption">{{ sortOption }}</option>
+      </select>
+      <p class="align-self-center">Направление:</p>
+      <select class="form-input select sort-select-width" [(ngModel)]="selectedDirection">
+        <option *ngFor="let direction of directions" [ngValue]="selectedDirection">{{ direction }}</option>
+      </select>
+    </div>
+
     <table mat-table [dataSource]="records">
       <ng-container matColumnDef="patient">
         <th mat-header-cell *matHeaderCellDef>Имя</th>
