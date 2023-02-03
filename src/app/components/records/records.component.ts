@@ -73,6 +73,10 @@ export class RecordsComponent {
   public selectedSortDirection = '';
   public sortDirectionVisibility = false;
 
+  public filtrationVisibility = false;
+  public filtrationFromDate: Date | null = null;
+  public filtrationToDate: Date | null = null;
+
   public paginatedRecords: PaginatedRecords = {
     content: [],
     page: '',
@@ -245,6 +249,10 @@ export class RecordsComponent {
         this.records = new MatTableDataSource<Record>(this.records.data.reverse());
       }
 
+      if (this.filtrationVisibility) {
+        this.filterRecords();
+      }
+
       return;
     }
 
@@ -252,6 +260,41 @@ export class RecordsComponent {
     this.selectedSortOption = '';
     this.sortDirectionVisibility = false;
     this.selectedSortDirection = '';
+  }
+
+  public filterRecords() {
+    if (this.filtrationFromDate && this.filtrationToDate) {
+      this.records = new MatTableDataSource<Record>(
+        this.records.data.filter(
+          (record) =>
+            new Date(record.receptionDate).getTime() >= new Date(this.filtrationFromDate!!).getTime()!! &&
+            new Date(record.receptionDate).getTime() <= new Date(this.filtrationToDate!!).getTime()!!
+        )
+      );
+    } else if (this.filtrationFromDate) {
+      this.records = new MatTableDataSource<Record>(
+        this.records.data.filter(
+          (record) => new Date(record.receptionDate).getTime() >= new Date(this.filtrationFromDate!!).getTime()!!
+        )
+      );
+    } else if (this.filtrationToDate) {
+      this.records = new MatTableDataSource<Record>(
+        this.records.data.filter(
+          (record) => new Date(record.receptionDate).getTime() <= new Date(this.filtrationToDate!!).getTime()!!
+        )
+      );
+    }
+  }
+
+  public changeFiltrationVisibility() {
+    this.filtrationVisibility = !this.filtrationVisibility;
+
+    if (!this.filtrationVisibility) {
+      this.filtrationFromDate = null;
+      this.filtrationToDate = null;
+
+      this.getRecords();
+    }
   }
 
   public showEditDialog(recordId: string) {
