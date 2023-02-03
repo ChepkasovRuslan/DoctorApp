@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -19,8 +20,6 @@ export class LoginComponent {
     private tokenStorageService: TokenStorageService
   ) {}
 
-  private INVALID_LOGIN_OR_PASSWORD = 'Invalid login or password';
-
   public login = '';
   public password = '';
 
@@ -28,19 +27,24 @@ export class LoginComponent {
     this.authService
       .loginUser(this.login, this.password)
       .pipe(
-        catchError(() => {
-          this.snackBarService.showErrorSnack(this.INVALID_LOGIN_OR_PASSWORD);
+        catchError((errorResponse: HttpErrorResponse) => {
           this.clearFields();
 
-          return throwError(() => new Error(this.INVALID_LOGIN_OR_PASSWORD));
+          if (errorResponse.status === 0) {
+            this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+            return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+          }
+
+          this.snackBarService.showSnack(this.snackBarService.INVALID_LOGIN_OR_PASSWORD);
+          return throwError(() => new Error(this.snackBarService.INVALID_LOGIN_OR_PASSWORD));
         })
       )
-      .subscribe((result) => {
+      .subscribe(async (result) => {
         this.tokenStorageService.saveToken(result.accessToken);
         this.tokenStorageService.saveRefreshToken(result.refreshToken);
         this.tokenStorageService.saveLogin(result.login);
 
-        this.router.navigate(['/records']);
+        await this.router.navigate(['/records']);
       });
   }
 

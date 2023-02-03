@@ -1,0 +1,49 @@
+main {
+  padding: 10px 0 10px 0;
+}
+
+.options-panel {
+  background: #C5E9FF;
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+  height: 100px;
+  padding: 15px 44px 15px 44px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.options-panel__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 188px;
+}
+
+.icons-container {
+  display: flex;
+  gap: 20px;
+}
+
+.gray-header {
+  background: #C4C4C4;
+}
+
+.table {
+  padding: 15px 44px 15px 44px;
+}
+
+.inline-border {
+  border-inline: 1px solid #000000;
+}
+
+.top-border {
+  border-top: 1px solid #000000;
+}
+
+.bottom-border {
+  border-bottom: 1px solid #000000;
+}
+
+.table-pages {
+  margin-top: 10px;
+  display: flex;
+}

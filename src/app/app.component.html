@@ -1,5 +1,8 @@
 <header>
-  <img class="header-image align-self-center" src="assets/images/healing.svg" alt="header image" />
-  <h1 class="align-self-center">{{ headerTitle }}</h1>
+  <div class="header-container">
+    <img class="header-image align-self-center" src="assets/images/healing.svg" alt="header image" />
+    <h1 class="align-self-center">{{ headerTitle }}</h1>
+  </div>
+  <a class="form-input clickable align-self-center" *ngIf="isExitVisible" (click)="logOut()">Выход</a>
 </header>
 <router-outlet></router-outlet>

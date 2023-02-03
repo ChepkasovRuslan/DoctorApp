@@ -20,6 +20,7 @@ export class RegistrationComponent {
     private snackBarService: SnackBarService,
     private tokenStorageService: TokenStorageService
   ) {}
+
   public login = '';
   public password = '';
   public repeatPassword = '';
@@ -29,8 +30,12 @@ export class RegistrationComponent {
       .registerUser(this.login, this.password, this.repeatPassword)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackBarService.showErrorSnack(errorResponse.error.errors.map((e: { msg: string }) => e.msg).join('. '));
           this.clearFields();
+
+          if (errorResponse.status === 0) {
+            this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+            return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+          }
 
           return throwError(() => new Error(errorResponse.status.toString()));
         })

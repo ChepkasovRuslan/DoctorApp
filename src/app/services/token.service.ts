@@ -31,4 +31,10 @@ export class TokenStorageService {
   }
 
   public getLogin = (): string | null => localStorage.getItem(this.LOGIN_KEY);
+
+  public clearData(): void {
+    localStorage.removeItem(this.ACCESS_TOKEN_KEY);
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+    localStorage.removeItem(this.LOGIN_KEY);
+  }
 }
