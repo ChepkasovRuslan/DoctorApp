@@ -30,12 +30,17 @@
   <div class="table">
     <div class="sort-container">
       <p class="align-self-center">Сортировать по:</p>
-      <select class="form-input select sort-select-width" [(ngModel)]="selectedSortOption">
-        <option *ngFor="let sortOption of sortOptions" [ngValue]="selectedSortOption">{{ sortOption }}</option>
+      <select class="form-input select sort-select-width" [(ngModel)]="selectedSortOption" (change)="sortRecords()">
+        <option *ngFor="let sortOption of sortOptions" [ngValue]="sortOption">{{ sortOption }}</option>
       </select>
-      <p class="align-self-center">Направление:</p>
-      <select class="form-input select sort-select-width" [(ngModel)]="selectedDirection">
-        <option *ngFor="let direction of directions" [ngValue]="selectedDirection">{{ direction }}</option>
+      <p class="align-self-center" *ngIf="sortDirectionVisibility">Направление:</p>
+      <select
+        class="form-input select sort-select-width"
+        [(ngModel)]="selectedSortDirection"
+        *ngIf="sortDirectionVisibility"
+        (change)="sortRecords()"
+      >
+        <option *ngFor="let direction of directions" [ngValue]="direction">{{ direction }}</option>
       </select>
     </div>
 

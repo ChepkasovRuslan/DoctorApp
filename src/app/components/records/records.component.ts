@@ -24,7 +24,22 @@ export class RecordsComponent {
     this.getRecords();
   }
 
+  private readonly PATIENT_COLUMN = 'patient';
+  private readonly DOCTOR_COLUMN = 'doctor';
+  private readonly DATE_COLUMN = 'date';
+  private readonly COMPLAINTS_COLUMN = 'complaints';
+  private readonly CHANGE_COLUMN = 'change';
+
+  private readonly NAME_SORT_OPTION = 'Имя';
+  private readonly DOCTOR_SORT_OPTION = 'Врач';
+  private readonly DATE_SORT_OPTION = 'Дата';
+  private readonly NONE_SORT_OPTION = 'None';
+
+  private readonly ASC_SORT_DIRECTION = 'По возрастанию';
+  private readonly DESC_SORT_DIRECTION = 'По убыванию';
+
   public readonly PAGE_SIZE = 5;
+
   public currentPage = 1;
   public totalCountOfElements = 1;
 
@@ -37,11 +52,26 @@ export class RecordsComponent {
     complaints: '',
   };
 
-  public readonly displayedColumns = ['patient', 'doctor', 'date', 'complaints', 'change'];
-  public readonly sortOptions = ['Имя', 'Врач', 'Дата'];
+  public readonly displayedColumns = [
+    this.PATIENT_COLUMN,
+    this.DOCTOR_COLUMN,
+    this.DATE_COLUMN,
+    this.COMPLAINTS_COLUMN,
+    this.CHANGE_COLUMN,
+  ];
+
+  public readonly sortOptions = [
+    this.NAME_SORT_OPTION,
+    this.DOCTOR_SORT_OPTION,
+    this.DATE_SORT_OPTION,
+    this.NONE_SORT_OPTION,
+  ];
+
+  public readonly directions = [this.ASC_SORT_DIRECTION, this.DESC_SORT_DIRECTION];
+
   public selectedSortOption = '';
-  public readonly directions = ['По возрастанию', 'По убыванию'];
-  public selectedDirection = '';
+  public selectedSortDirection = '';
+  public sortDirectionVisibility = false;
 
   public paginatedRecords: PaginatedRecords = {
     content: [],
@@ -94,6 +124,7 @@ export class RecordsComponent {
         this.totalCountOfElements = result.totalCountOfElements;
 
         this.records = new MatTableDataSource<Record>(this.paginatedRecords.content);
+        this.sortRecords();
       });
   }
 
@@ -183,6 +214,44 @@ export class RecordsComponent {
           this.snackBarService.showSnack(this.snackBarService.RECORD_DELETED);
         }
       });
+  }
+
+  public sortRecords() {
+    if (this.selectedSortOption !== this.NONE_SORT_OPTION) {
+      switch (this.selectedSortOption) {
+        case this.NAME_SORT_OPTION:
+          this.records = new MatTableDataSource<Record>(
+            this.records.data.sort((a, b) => (a.patientFullName > b.patientFullName ? 1 : -1))
+          );
+          this.sortDirectionVisibility = true;
+          break;
+        case this.DOCTOR_SORT_OPTION:
+          this.records = new MatTableDataSource<Record>(
+            this.records.data.sort((a, b) =>
+              (a.doctor as Doctor).fullName!! > (b.doctor as Doctor).fullName!! ? 1 : -1
+            )
+          );
+          this.sortDirectionVisibility = true;
+          break;
+        case this.DATE_SORT_OPTION:
+          this.records = new MatTableDataSource<Record>(
+            this.records.data.sort((a, b) => (new Date(a.receptionDate) > new Date(b.receptionDate) ? 1 : -1))
+          );
+          this.sortDirectionVisibility = true;
+          break;
+      }
+
+      if (this.selectedSortDirection === this.DESC_SORT_DIRECTION) {
+        this.records = new MatTableDataSource<Record>(this.records.data.reverse());
+      }
+
+      return;
+    }
+
+    this.getRecords();
+    this.selectedSortOption = '';
+    this.sortDirectionVisibility = false;
+    this.selectedSortDirection = '';
   }
 
   public showEditDialog(recordId: string) {
