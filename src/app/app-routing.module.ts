@@ -8,6 +8,11 @@ import { RegistrationComponent } from './components/registration/registration.co
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'records',
+  },
+  {
     path: 'registration',
     component: RegistrationComponent,
   },

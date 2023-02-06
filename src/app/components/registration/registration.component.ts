@@ -37,14 +37,24 @@ export class RegistrationComponent {
             return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
           }
 
+          if (errorResponse.status === 400) {
+            this.snackBarService.showHttpErrors(errorResponse);
+            return throwError(() => new Error(errorResponse.error.errors));
+          }
+
+          if (errorResponse.status === 409) {
+            this.snackBarService.showSnack(this.snackBarService.LOGIN_EXISTS);
+            return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+          }
+
           return throwError(() => new Error(errorResponse.status.toString()));
         })
       )
-      .subscribe(async (result) => {
+      .subscribe((result) => {
         this.tokenStorageService.saveToken(result.accessToken);
         this.tokenStorageService.saveRefreshToken(result.refreshToken);
 
-        await this.router.navigate(['/login']);
+        this.router.navigate(['/records']);
       });
   }
 

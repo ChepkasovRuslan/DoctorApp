@@ -31,10 +31,10 @@
         [(ngModel)]="repeatPassword"
       />
       <div class="form-block display-direction-column">
-        <a class="clickable form-btn align-self-end form-input form-items__item" (click)="registerUser()"
-          >Зарегистрироваться</a
-        >
-        <a class="clickable form-link align-self-end form-items__item" href="/login">Авторизоваться</a>
+        <button class="clickable form-btn align-self-end form-input form-items__item" (click)="registerUser()">
+          Зарегистрироваться
+        </button>
+        <a class="clickable form-link align-self-end form-items__item" routerLink="/login">Авторизоваться</a>
       </div>
     </div>
   </form>

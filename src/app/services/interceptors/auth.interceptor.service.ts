@@ -18,17 +18,17 @@ export class AuthInterceptorService implements HttpInterceptor {
     const token = this.tokenStorageService.getToken();
 
     if (token) {
-      if (this.tokenExpired(token)) {
-        const refreshToken = this.tokenStorageService.getRefreshToken();
-        this.authService.refreshToken(refreshToken!!).subscribe((result) => {
-          this.tokenStorageService.saveToken(result.accessToken);
-          this.tokenStorageService.saveRefreshToken(result.refreshToken);
-        });
-      } else {
-        request = request.clone({
-          setHeaders: { Authorization: token },
-        });
-      }
+      // if (this.tokenExpired(token)) {
+      //   const refreshToken = this.tokenStorageService.getRefreshToken();
+      //   this.authService.refreshToken(refreshToken!!).subscribe((result) => {
+      //     this.tokenStorageService.saveToken(result.accessToken);
+      //     this.tokenStorageService.saveRefreshToken(result.refreshToken);
+      //   });
+      // } else {
+      request = request.clone({
+        setHeaders: { Authorization: token },
+      });
+      // }
     }
 
     return next.handle(request).pipe(
