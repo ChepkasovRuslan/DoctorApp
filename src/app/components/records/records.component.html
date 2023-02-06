@@ -85,7 +85,7 @@
     <table mat-table [dataSource]="records">
       <ng-container matColumnDef="patient">
         <th mat-header-cell *matHeaderCellDef>Имя</th>
-        <td class="inline-border" mat-cell *matCellDef="let record">{{ record.patientFullName }}</td>
+        <td class="inline-border w-275" mat-cell *matCellDef="let record">{{ record.patientFullName }}</td>
       </ng-container>
 
       <ng-container matColumnDef="doctor">
@@ -104,7 +104,7 @@
 
       <ng-container matColumnDef="complaints">
         <th mat-header-cell *matHeaderCellDef>Жалобы</th>
-        <td class="inline-border" mat-cell *matCellDef="let record">{{ record.complaints }}</td>
+        <td class="inline-border w-275" mat-cell *matCellDef="let record">{{ record.complaints }}</td>
       </ng-container>
 
       <ng-container matColumnDef="change">

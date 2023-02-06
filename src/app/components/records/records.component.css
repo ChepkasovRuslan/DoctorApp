@@ -31,6 +31,10 @@ main {
   padding: 15px 44px 15px 44px;
 }
 
+.w-275{
+  max-width: 275px;
+}
+
 .inline-border {
   border-inline: 1px solid #000000;
 }
@@ -69,4 +73,8 @@ main {
 .filter-container__item {
   display: flex;
   gap: 8px;
+}
+
+.mat-column-patient {
+  flex: 0 0 10%;
 }
