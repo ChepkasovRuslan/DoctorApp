@@ -15,17 +15,14 @@ export class HttpService {
 
   public getAllDoctors = (): Observable<Doctor[]> => this.http.get<Doctor[]>(`${this.URL}/doctors`);
 
-  public getAllRecords = (pageSize: number, page: number): Observable<PaginatedRecords> =>
-    this.http.get<PaginatedRecords>(`${this.URL}/records?pageSize=${pageSize}&page=${page}`);
-
-  public getAllRecordsWithSort = (
+  public getAllRecords = (
     pageSize: number,
     page: number,
     sort: string,
     direction: string
   ): Observable<PaginatedRecords> =>
     this.http.get<PaginatedRecords>(
-      `${this.URL}/records?pageSize=${pageSize}&page=${page}&sort=${sort}&direction=${direction}`
+      `${this.URL}/records?pageSize=${pageSize}&page=${page}&sort=${sort}&sortDirection=${direction}`
     );
 
   public getRecord = (recordId: string): Observable<Record> => this.http.get<Record>(`${this.URL}/record/${recordId}`);

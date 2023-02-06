@@ -30,13 +30,16 @@ export class RecordsComponent {
   private readonly COMPLAINTS_COLUMN = 'complaints';
   private readonly CHANGE_COLUMN = 'change';
 
-  private readonly NAME_SORT_OPTION = 'Имя';
-  private readonly DOCTOR_SORT_OPTION = 'Врач';
-  private readonly DATE_SORT_OPTION = 'Дата';
+  private readonly NAME_SORT_OPTION_KEY = 'patientFullName';
+  private readonly NAME_SORT_OPTION_VALUE = 'Имя';
+  private readonly DATE_SORT_OPTION_KEY = 'receptionDate';
+  private readonly DATE_SORT_OPTION_VALUE = 'Дата';
   private readonly NONE_SORT_OPTION = 'None';
 
-  private readonly ASC_SORT_DIRECTION = 'По возрастанию';
-  private readonly DESC_SORT_DIRECTION = 'По убыванию';
+  private readonly ASC_SORT_DIRECTION_KEY = 'asc';
+  private readonly ASC_SORT_DIRECTION_VALUE = 'По возрастанию';
+  private readonly DESC_SORT_DIRECTION_KEY = 'desc';
+  private readonly DESC_SORT_DIRECTION_VALUE = 'По убыванию';
 
   public readonly PAGE_SIZE = 5;
 
@@ -61,16 +64,18 @@ export class RecordsComponent {
   ];
 
   public readonly sortOptions = [
-    this.NAME_SORT_OPTION,
-    this.DOCTOR_SORT_OPTION,
-    this.DATE_SORT_OPTION,
-    this.NONE_SORT_OPTION,
+    { key: this.NAME_SORT_OPTION_KEY, value: this.NAME_SORT_OPTION_VALUE },
+    { key: this.DATE_SORT_OPTION_KEY, value: this.DATE_SORT_OPTION_VALUE },
+    { key: this.NONE_SORT_OPTION, value: this.NONE_SORT_OPTION },
   ];
 
-  public readonly directions = [this.ASC_SORT_DIRECTION, this.DESC_SORT_DIRECTION];
+  public readonly directions = [
+    { key: this.ASC_SORT_DIRECTION_KEY, value: this.ASC_SORT_DIRECTION_VALUE },
+    { key: this.DESC_SORT_DIRECTION_KEY, value: this.DESC_SORT_DIRECTION_VALUE },
+  ];
 
-  public selectedSortOption = '';
-  public selectedSortDirection = '';
+  public selectedSortOption = { key: '', value: '' };
+  public selectedSortDirection = { key: '', value: '' };
   public sortDirectionVisibility = false;
 
   public filtrationVisibility = false;
@@ -107,7 +112,7 @@ export class RecordsComponent {
 
   private getRecords() {
     this.httpService
-      .getAllRecords(this.PAGE_SIZE, this.currentPage)
+      .getAllRecords(this.PAGE_SIZE, this.currentPage, 'none', 'asc')
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           if (errorResponse.status !== 401) {
@@ -128,7 +133,6 @@ export class RecordsComponent {
         this.totalCountOfElements = result.totalCountOfElements;
 
         this.records = new MatTableDataSource<Record>(this.paginatedRecords.content);
-        this.sortRecords();
       });
   }
 
@@ -220,46 +224,37 @@ export class RecordsComponent {
       });
   }
 
-  public sortRecords() {
-    if (this.selectedSortOption !== this.NONE_SORT_OPTION) {
-      switch (this.selectedSortOption) {
-        case this.NAME_SORT_OPTION:
-          this.records = new MatTableDataSource<Record>(
-            this.records.data.sort((a, b) => (a.patientFullName > b.patientFullName ? 1 : -1))
-          );
-          this.sortDirectionVisibility = true;
-          break;
-        case this.DOCTOR_SORT_OPTION:
-          this.records = new MatTableDataSource<Record>(
-            this.records.data.sort((a, b) =>
-              (a.doctor as Doctor).fullName!! > (b.doctor as Doctor).fullName!! ? 1 : -1
-            )
-          );
-          this.sortDirectionVisibility = true;
-          break;
-        case this.DATE_SORT_OPTION:
-          this.records = new MatTableDataSource<Record>(
-            this.records.data.sort((a, b) => (new Date(a.receptionDate) > new Date(b.receptionDate) ? 1 : -1))
-          );
-          this.sortDirectionVisibility = true;
-          break;
-      }
-
-      if (this.selectedSortDirection === this.DESC_SORT_DIRECTION) {
-        this.records = new MatTableDataSource<Record>(this.records.data.reverse());
-      }
-
-      if (this.filtrationVisibility) {
-        this.filterRecords();
-      }
-
+  public getRecordsWithSort() {
+    if (this.selectedSortOption.key === this.NONE_SORT_OPTION) {
+      this.sortDirectionVisibility = false;
+      this.getRecords();
       return;
     }
 
-    this.getRecords();
-    this.selectedSortOption = '';
-    this.sortDirectionVisibility = false;
-    this.selectedSortDirection = '';
+    this.httpService
+      .getAllRecords(this.PAGE_SIZE, this.currentPage, this.selectedSortOption.key, this.selectedSortDirection.key)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          if (errorResponse.status !== 401) {
+            if (errorResponse.status === 0) {
+              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
+              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
+            }
+
+            return throwError(() => new Error());
+          }
+          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
+          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
+        })
+      )
+      .subscribe((result) => {
+        this.paginatedRecords = result;
+
+        this.totalCountOfElements = result.totalCountOfElements;
+
+        this.records = new MatTableDataSource<Record>(this.paginatedRecords.content);
+      });
+    this.sortDirectionVisibility = true;
   }
 
   public filterRecords() {
@@ -302,12 +297,28 @@ export class RecordsComponent {
   }
 
   public nextPage() {
-    if (this.currentPage < Math.ceil(this.totalCountOfElements / this.PAGE_SIZE)) this.currentPage++;
-    this.getRecords();
+    if (this.currentPage < Math.ceil(this.totalCountOfElements / this.PAGE_SIZE)) {
+      this.currentPage++;
+
+      if (this.sortDirectionVisibility) {
+        this.getRecordsWithSort();
+        return;
+      }
+
+      this.getRecords();
+    }
   }
 
   public previousPage() {
-    if (this.currentPage > 1) this.currentPage--;
-    this.getRecords();
+    if (this.currentPage > 1) {
+      this.currentPage--;
+
+      if (this.sortDirectionVisibility) {
+        this.getRecordsWithSort();
+        return;
+      }
+
+      this.getRecords();
+    }
   }
 }
