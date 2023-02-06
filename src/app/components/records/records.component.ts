@@ -165,9 +165,9 @@ export class RecordsComponent {
           })
           .afterClosed()
           // eslint-disable-next-line rxjs/no-nested-subscribe
-          .subscribe((result) => {
+          .subscribe(async (result) => {
             if (result) {
-              this.getRecords();
+              await this.getRecords();
               this.snackBarService.showSnack(this.snackBarService.RECORD_EDITED);
             }
           });

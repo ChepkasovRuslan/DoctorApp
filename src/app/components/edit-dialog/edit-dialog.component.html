@@ -16,11 +16,16 @@
     </div>
     <div>
       <p>Дата:</p>
-      <input class="form-input" type="date" [ngModel]="data.record.receptionDate | date : 'yyyy-MM-dd'" />
+      <input
+        class="form-input"
+        type="date"
+        [ngModel]="data.record.receptionDate | date : 'yyyy-MM-dd'"
+        (ngModelChange)="data.record.receptionDate = $event"
+      />
     </div>
     <div>
       <p>Жалобы:</p>
-      <textarea class="form-input large-input fill-available" [ngModel]="data.record.complaints"></textarea>
+      <textarea class="form-input large-input fill-available" [(ngModel)]="data.record.complaints"></textarea>
     </div>
   </div>
   <div class="dialog-footer" mat-dialog-actions>
