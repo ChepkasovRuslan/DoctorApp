@@ -19,10 +19,12 @@ export class HttpService {
     pageSize: number,
     page: number,
     sort: string,
-    direction: string
+    direction: string,
+    fromDate = '',
+    toDate = ''
   ): Observable<PaginatedRecords> =>
     this.http.get<PaginatedRecords>(
-      `${this.URL}/records?pageSize=${pageSize}&page=${page}&sort=${sort}&sortDirection=${direction}`
+      `${this.URL}/records?pageSize=${pageSize}&page=${page}&sort=${sort}&sortDirection=${direction}&fromDate=${fromDate}&toDate=${toDate}`
     );
 
   public getRecord = (recordId: string): Observable<Record> => this.http.get<Record>(`${this.URL}/record/${recordId}`);

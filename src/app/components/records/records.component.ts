@@ -74,7 +74,7 @@ export class RecordsComponent {
     { key: this.DESC_SORT_DIRECTION_KEY, value: this.DESC_SORT_DIRECTION_VALUE },
   ];
 
-  public selectedSortOption = { key: '', value: '' };
+  public selectedSortOption = this.sortOptions[2];
   public selectedSortDirection = { key: '', value: '' };
   public sortDirectionVisibility = false;
 
@@ -110,9 +110,18 @@ export class RecordsComponent {
       });
   }
 
-  private getRecords() {
+  public getRecords() {
+    this.sortDirectionVisibility = this.selectedSortOption.key !== this.NONE_SORT_OPTION;
+
     this.httpService
-      .getAllRecords(this.PAGE_SIZE, this.currentPage, 'none', 'asc')
+      .getAllRecords(
+        this.PAGE_SIZE,
+        this.currentPage,
+        this.selectedSortOption.key ? this.selectedSortOption.key : this.NONE_SORT_OPTION,
+        this.selectedSortDirection.key ? this.selectedSortDirection.key : this.ASC_SORT_DIRECTION_KEY,
+        this.filtrationFromDate ? this.filtrationFromDate!!.toString() : '',
+        this.filtrationToDate ? this.filtrationToDate!!.toString() : ''
+      )
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           if (errorResponse.status !== 401) {
@@ -224,63 +233,6 @@ export class RecordsComponent {
       });
   }
 
-  public getRecordsWithSort() {
-    if (this.selectedSortOption.key === this.NONE_SORT_OPTION) {
-      this.sortDirectionVisibility = false;
-      this.getRecords();
-      return;
-    }
-
-    this.httpService
-      .getAllRecords(this.PAGE_SIZE, this.currentPage, this.selectedSortOption.key, this.selectedSortDirection.key)
-      .pipe(
-        catchError((errorResponse: HttpErrorResponse) => {
-          if (errorResponse.status !== 401) {
-            if (errorResponse.status === 0) {
-              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
-              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
-            }
-
-            return throwError(() => new Error());
-          }
-          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
-          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
-        })
-      )
-      .subscribe((result) => {
-        this.paginatedRecords = result;
-
-        this.totalCountOfElements = result.totalCountOfElements;
-
-        this.records = new MatTableDataSource<Record>(this.paginatedRecords.content);
-      });
-    this.sortDirectionVisibility = true;
-  }
-
-  public filterRecords() {
-    if (this.filtrationFromDate && this.filtrationToDate) {
-      this.records = new MatTableDataSource<Record>(
-        this.records.data.filter(
-          (record) =>
-            new Date(record.receptionDate).getTime() >= new Date(this.filtrationFromDate!!).getTime()!! &&
-            new Date(record.receptionDate).getTime() <= new Date(this.filtrationToDate!!).getTime()!!
-        )
-      );
-    } else if (this.filtrationFromDate) {
-      this.records = new MatTableDataSource<Record>(
-        this.records.data.filter(
-          (record) => new Date(record.receptionDate).getTime() >= new Date(this.filtrationFromDate!!).getTime()!!
-        )
-      );
-    } else if (this.filtrationToDate) {
-      this.records = new MatTableDataSource<Record>(
-        this.records.data.filter(
-          (record) => new Date(record.receptionDate).getTime() <= new Date(this.filtrationToDate!!).getTime()!!
-        )
-      );
-    }
-  }
-
   public changeFiltrationVisibility() {
     this.filtrationVisibility = !this.filtrationVisibility;
 
@@ -301,7 +253,7 @@ export class RecordsComponent {
       this.currentPage++;
 
       if (this.sortDirectionVisibility) {
-        this.getRecordsWithSort();
+        this.getRecords();
         return;
       }
 
@@ -314,7 +266,7 @@ export class RecordsComponent {
       this.currentPage--;
 
       if (this.sortDirectionVisibility) {
-        this.getRecordsWithSort();
+        this.getRecords();
         return;
       }
 

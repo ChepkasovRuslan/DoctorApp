@@ -30,11 +30,7 @@
   <div class="table">
     <div class="sort-container">
       <p class="align-self-center">Сортировать по:</p>
-      <select
-        class="form-input select sort-select-width"
-        [(ngModel)]="selectedSortOption"
-        (change)="getRecordsWithSort()"
-      >
+      <select class="form-input select sort-select-width" [(ngModel)]="selectedSortOption" (change)="getRecords()">
         <option *ngFor="let sortOption of sortOptions" [ngValue]="sortOption">{{ sortOption.value }}</option>
       </select>
       <p class="align-self-center" *ngIf="sortDirectionVisibility">Направление:</p>
@@ -42,7 +38,7 @@
         class="form-input select sort-select-width"
         [(ngModel)]="selectedSortDirection"
         *ngIf="sortDirectionVisibility"
-        (change)="getRecordsWithSort()"
+        (change)="getRecords()"
       >
         <option *ngFor="let direction of directions" [ngValue]="direction">{{ direction.value }}</option>
       </select>
@@ -74,7 +70,7 @@
         />
       </div>
 
-      <button class="form-input clickable" *ngIf="filtrationVisibility" (click)="filterRecords()">Фильтровать</button>
+      <button class="form-input clickable" *ngIf="filtrationVisibility" (click)="getRecords()">Фильтровать</button>
 
       <mat-icon
         class="clickable align-self-center"
@@ -86,7 +82,7 @@
       ></mat-icon>
     </div>
 
-    <table mat-table [dataSource]="records">
+    <table mat-table [dataSource]="records" *ngIf="records.data.length">
       <ng-container matColumnDef="patient">
         <th mat-header-cell *matHeaderCellDef>Имя</th>
         <td class="inline-border w-275" mat-cell *matCellDef="let record">{{ record.patientFullName }}</td>
