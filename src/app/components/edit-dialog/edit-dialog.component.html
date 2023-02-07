@@ -5,13 +5,15 @@
   <div class="dialog-body">
     <div>
       <p>Имя:</p>
-      <input class="form-input fill-available" [(ngModel)]="data.record.patientFullName" type="text" />
+      <input class="form-input fill-available" [(ngModel)]="record.patientFullName" type="text" />
     </div>
     <div>
       <p>Врач:</p>
-      <select class="form-input select" [(ngModel)]="data.record.doctor">
+      <select class="form-input select" [(ngModel)]="selectedDoctorId">
         <option [ngValue]="null" disabled>Выберите врача</option>
-        <option *ngFor="let doctor of data.doctors" [ngValue]="doctor.id">{{ doctor.fullName }}</option>
+        <option *ngFor="let doctor of data.doctors" [value]="doctor.id">
+          {{ doctor.fullName }}
+        </option>
       </select>
     </div>
     <div>
@@ -19,13 +21,13 @@
       <input
         class="form-input"
         type="date"
-        [ngModel]="data.record.receptionDate | date : 'yyyy-MM-dd'"
-        (ngModelChange)="data.record.receptionDate = $event"
+        [ngModel]="record.receptionDate | date : 'yyyy-MM-dd'"
+        (ngModelChange)="record.receptionDate = $event"
       />
     </div>
     <div>
       <p>Жалобы:</p>
-      <textarea class="form-input large-input fill-available" [(ngModel)]="data.record.complaints"></textarea>
+      <textarea class="form-input large-input fill-available" [(ngModel)]="record.complaints"></textarea>
     </div>
   </div>
   <div class="dialog-footer" mat-dialog-actions>

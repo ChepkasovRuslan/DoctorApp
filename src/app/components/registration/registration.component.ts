@@ -51,6 +51,7 @@ export class RegistrationComponent {
         })
       )
       .subscribe((result) => {
+        this.tokenStorageService.saveLogin(result.login);
         this.tokenStorageService.saveToken(result.accessToken);
         this.tokenStorageService.saveRefreshToken(result.refreshToken);
 

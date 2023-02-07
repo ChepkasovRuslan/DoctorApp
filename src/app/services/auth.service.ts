@@ -12,8 +12,8 @@ export class AuthService {
 
   private URL = environment.URL;
 
-  public registerUser = (login: string, password: string, confirmedPassword: string): Observable<Tokens> =>
-    this.http.post<Tokens>(this.URL + '/auth/registration', {
+  public registerUser = (login: string, password: string, confirmedPassword: string): Observable<ExtendedTokens> =>
+    this.http.post<ExtendedTokens>(this.URL + '/auth/registration', {
       login: login,
       password: password,
       confirmedPassword: confirmedPassword,

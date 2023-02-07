@@ -18,23 +18,15 @@ export class AuthInterceptorService implements HttpInterceptor {
     const token = this.tokenStorageService.getToken();
 
     if (token) {
-      // if (this.tokenExpired(token)) {
-      //   const refreshToken = this.tokenStorageService.getRefreshToken();
-      //   this.authService.refreshToken(refreshToken!!).subscribe((result) => {
-      //     this.tokenStorageService.saveToken(result.accessToken);
-      //     this.tokenStorageService.saveRefreshToken(result.refreshToken);
-      //   });
-      // } else {
       request = request.clone({
         setHeaders: { Authorization: token },
       });
-      // }
     }
 
     return next.handle(request).pipe(
       catchError((err) => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
+          if (err.status === 401 && !request.url.includes('doctors')) {
             this.router.navigate(['/login']);
           }
         }
@@ -45,6 +37,6 @@ export class AuthInterceptorService implements HttpInterceptor {
 
   private tokenExpired(token: string) {
     const expiry = JSON.parse(atob(token.split('.')[1])).exp;
-    return Math.floor(new Date().getTime() / 1000) >= expiry;
+    return expiry * 1000 > Date.now();
   }
 }

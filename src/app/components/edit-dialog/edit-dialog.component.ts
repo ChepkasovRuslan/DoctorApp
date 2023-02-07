@@ -19,18 +19,31 @@ export class EditDialogComponent {
     private snackBarService: SnackBarService,
     public dialogRef: MatDialogRef<EditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { record: Record; doctors: Doctor[] }
-  ) {}
+  ) {
+    this.record = JSON.parse(JSON.stringify(this.data.record));
+    this.selectedDoctorId = (this.record.doctor as Doctor).id;
+  }
+
+  public record: Record;
+  public selectedDoctorId: string;
 
   public submitEdit() {
     this.httpService
-      .editRecord(this.data.record.id!!, this.data.record)
+      .editRecord(this.data.record.id!!, {
+        patientFullName: this.record.patientFullName,
+        doctor: this.selectedDoctorId,
+        complaints: this.record.complaints,
+        receptionDate: this.record.receptionDate,
+      })
       .pipe(
         catchError((err: Error) => {
           this.snackBarService.showSnack(err.message);
           return of({});
         })
       )
-      .subscribe(() => this.close());
+      .subscribe(() => {
+        this.close();
+      });
   }
 
   private close() {

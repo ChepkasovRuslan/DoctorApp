@@ -145,45 +145,23 @@ export class RecordsComponent {
       });
   }
 
-  private getEditRecord(recordId: string) {
-    this.httpService
-      .getRecord(recordId)
-      .pipe(
-        catchError((errorResponse: HttpErrorResponse) => {
-          if (errorResponse.status !== 401) {
-            if (errorResponse.status === 404) {
-              this.snackBarService.showSnack(this.snackBarService.RECORD_NOT_FOUND);
-              return throwError(() => new Error(this.snackBarService.RECORD_NOT_FOUND));
-            } else if (errorResponse.status === 0) {
-              this.snackBarService.showSnack(this.snackBarService.NO_CONNECTION);
-              return throwError(() => new Error(this.snackBarService.NO_CONNECTION));
-            }
+  public showEditDialog(record: Record) {
+    this.dialog
+      .open(EditDialogComponent, {
+        width: '642px',
+        height: '615px',
 
-            return throwError(() => new Error());
-          }
-          this.snackBarService.showSnack(this.snackBarService.UNAUTHORIZED);
-          return throwError(() => new Error(this.snackBarService.UNAUTHORIZED));
-        })
-      )
+        data: {
+          record: record,
+          doctors: this.doctors,
+        },
+      })
+      .afterClosed()
       .subscribe((result) => {
-        this.dialog
-          .open(EditDialogComponent, {
-            width: '642px',
-            height: '615px',
-
-            data: {
-              record: result,
-              doctors: this.doctors,
-            },
-          })
-          .afterClosed()
-          // eslint-disable-next-line rxjs/no-nested-subscribe
-          .subscribe(async (result) => {
-            if (result) {
-              await this.getRecords();
-              this.snackBarService.showSnack(this.snackBarService.RECORD_EDITED);
-            }
-          });
+        if (result) {
+          this.getRecords();
+          this.snackBarService.showSnack(this.snackBarService.RECORD_EDITED);
+        }
       });
   }
 
@@ -242,10 +220,6 @@ export class RecordsComponent {
 
       this.getRecords();
     }
-  }
-
-  public showEditDialog(recordId: string) {
-    this.getEditRecord(recordId);
   }
 
   public nextPage() {
