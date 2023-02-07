@@ -1,18 +1,17 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from 'rxjs';
+import { Tokens } from 'src/app/interfaces/tokens.interface';
 
 import { AuthService } from '../auth.service';
 import { TokenStorageService } from '../token.service';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(
-    private tokenStorageService: TokenStorageService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  constructor(private tokenStorageService: TokenStorageService, private authService: AuthService) {}
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.tokenStorageService.getToken();
@@ -26,17 +25,49 @@ export class AuthInterceptorService implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err) => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status === 401 && !request.url.includes('doctors')) {
-            this.router.navigate(['/login']);
+          if (err.status === 401) {
+            return this.handle401Error(request, next);
           }
         }
+
         return throwError(err);
       })
     );
   }
 
-  private tokenExpired(token: string) {
-    const expiry = JSON.parse(atob(token.split('.')[1])).exp;
-    return expiry * 1000 > Date.now();
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      this.authService.refreshToken(this.tokenStorageService.getRefreshToken()!!).subscribe((res) => {
+        this.tokenStorageService.saveToken(res.accessToken);
+        this.tokenStorageService.saveRefreshToken(res.refreshToken);
+      });
+
+      return this.authService.refreshToken(this.tokenStorageService.getRefreshToken()!!).pipe(
+        switchMap((token: Tokens) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(token.accessToken);
+          return next.handle(
+            (request = request.clone({
+              setHeaders: { Authorization: token.accessToken },
+            }))
+          );
+        })
+      );
+    } else {
+      return this.refreshTokenSubject.pipe(
+        filter((token) => token != null),
+        take(1),
+        switchMap((jwt) => {
+          return next.handle(
+            (request = request.clone({
+              setHeaders: { Authorization: jwt },
+            }))
+          );
+        })
+      );
+    }
   }
 }
